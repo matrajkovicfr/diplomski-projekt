@@ -5,8 +5,167 @@
 {% endblock %}
 
 {% block body %}
-    <div id="home">
-        <h1>Title</h1>
+    <div id="home" class="p-4">
+
+        <!-- Table with parameters and values -->
+        <div class="flex flex-col pt-4">
+            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                    <div class="shadow overflow-hidden  sm:rounded-lg">
+
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-800 tracking-wider">Parameter</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-800 tracking-wider">Unit</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-800 tracking-wider">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+
+                                <!-- Frequency -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Channel frequency</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">GHz</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="text" v-model="frequency" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                    </td>
+                                </tr>
+
+                                <!-- Bandwidth -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Channel bandwidth</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">MHz</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="text" v-model="bandwidth" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                    </td>
+                                </tr>
+
+                                <!-- Coordinates -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Base station coordinates</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Latitude, longitude</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="text" v-model="coordinates" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                    </td>
+                                </tr>
+
+                                <!-- Radius -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Cell radius</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">m</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="text" v-model="radius" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                    </td>
+                                </tr>
+
+                                <!-- Antenna type -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Antenna type</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800"></td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="radio" v-model="antenna_type" value="macro" id="macro" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                        <label for="macro" class="px-2">macro</label>
+                                        <input v-if="frequency >= 2.0" type="radio" v-model="antenna_type" value="micro" id="micro" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                        <label v-if="frequency >= 2.0" for="micro" class="px-2">micro</label>
+                                    </td>
+                                </tr>
+
+                                <!-- Area type -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Area type</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800"></td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="radio" v-model="area_type" value="urban" id="urban" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                        <label for="urban" class="px-2">urban</label>
+                                        <input v-if="frequency < 2.0" type="radio" v-model="area_type" value="suburban" id="suburban" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                        <label v-if="frequency < 2.0" for="suburban" class="px-2">suburban</label>
+                                        <input v-if="antenna_type == 'macro' || frequency < 2.0" type="radio" v-model="area_type" value="rural" id="rural" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                        <label v-if="antenna_type == 'macro' || frequency < 2.0" for="rural" class="px-2">rural</label>
+                                    </td>
+                                </tr>
+
+                                <!-- Transmitter power -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Transmitter power</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">dBm</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="text" v-model="tx_power" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                    </td>
+                                </tr>
+
+                                <!-- Transmitter gain -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Transmitter gain</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">dBi</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="text" v-model="tx_gain" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                    </td>
+                                </tr>
+
+                                <!-- Transmitter losses -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Transmitter losses</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">dB</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="text" v-model="tx_losses" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                    </td>
+                                </tr>
+
+                                <!-- Receiver gain -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Receiver losses</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">dBi</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="text" v-model="rx_gain" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                    </td>
+                                </tr>
+
+                                <!-- Receiver losses -->
+                                <tr>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">Receiver losses</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">dB</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        <input type="text" v-model="rx_losses" class="px-4 border-solid border-2 rounded border-gray-400 focus:outline-none">
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Run button -->
+        <div class="flex justify-center p-4">
+            <button type="button" class="w-80 px-4 py-2 rounded bg-gray-900 text-white focus:outline-none">Update results</button>
+        </div>
+
+        <!-- Result graphs -->
+        <div class="grid grid-cols-2">
+            <div class="col-span-1">
+                <canvas id="chart-loss"></canvas>
+            </div>
+            <div class="col-span-1">
+                <canvas id="chart-received-power"></canvas>
+            </div>
+            <div class="col-span-1">
+                <canvas id="chart-interference-power"></canvas>
+            </div>
+            <div class="col-span-1">
+                <canvas id="chart-snr"></canvas>
+            </div>
+            <div class="col-span-1">
+                <canvas id="chart-capacity"></canvas>
+            </div>
+            <div class="col-span-1">
+                <canvas id="chart-sinr"></canvas>
+            </div>
+        </div>
+
+
     </div>
 {% endblock %}
 
@@ -57,7 +216,134 @@
                     tx_losses: this.tx_losses,
                     rx_gain: this.rx_gain,
                     rx_losses: this.rx_losses
-                }).then( response => this.results = response.data);
+                }).then( response => {
+                    this.results = response.data;
+
+                    var chart_loss = new Chart(document.getElementById('chart-loss'), {
+                        type: "line",
+                        data: {
+                            labels: response.data.distance,
+                            datasets: [{
+                                borderColor: "#3e95cd",
+                                data: response.data.loss,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            title: {display: true, text: "Path loss"},
+                            scales: {
+                                xAxes: [{display: true, scaleLabel: {display: true, labelString: 'Distance [m]'}}],
+                                yAxes: [{display: true, scaleLabel: {display: true, labelString: 'Path loss [dB]'}}],
+                            }
+                        },
+                    });
+
+                    var chart_received_power = new Chart(document.getElementById('chart-received-power'), {
+                        type: "line",
+                        data: {
+                            labels: response.data.distance,
+                            datasets: [{
+                                borderColor: "#3e95cd",
+                                data: response.data.received_power,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            title: {display: true, text: "Received power"},
+                            scales: {
+                                xAxes: [{display: true, scaleLabel: {display: true, labelString: 'Distance [m]'}}],
+                                yAxes: [{display: true, scaleLabel: {display: true, labelString: 'Received power [dBm]'}}],
+                            }
+                        },
+                    });
+
+                    var chart_interference_power = new Chart(document.getElementById('chart-interference-power'), {
+                        type: "line",
+                        data: {
+                            labels: response.data.distance,
+                            datasets: [{
+                                borderColor: "#3e95cd",
+                                data: response.data.interference_power,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            title: {display: true, text: "Interference power"},
+                            scales: {
+                                xAxes: [{display: true, scaleLabel: {display: true, labelString: 'Distance [m]'}}],
+                                yAxes: [{display: true, scaleLabel: {display: true, labelString: 'Interference power [dBm]'}}],
+                            }
+                        },
+                    });
+
+                    var chart_snr = new Chart(document.getElementById('chart-snr'), {
+                        type: "line",
+                        data: {
+                            labels: response.data.distance,
+                            datasets: [{
+                                borderColor: "#3e95cd",
+                                data: response.data.snr,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            title: {display: true, text: "SNR"},
+                            scales: {
+                                xAxes: [{display: true, scaleLabel: {display: true, labelString: 'Distance [m]'}}],
+                                yAxes: [{display: true, scaleLabel: {display: true, labelString: 'SNR [dBm]'}}],
+                            }
+                        },
+                    });
+
+                    var chart_capacity = new Chart(document.getElementById('chart-capacity'), {
+                        type: "line",
+                        data: {
+                            labels: response.data.distance,
+                            datasets: [{
+                                borderColor: "#3e95cd",
+                                data: response.data.capacity,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            title: {display: true, text: "Capacity"},
+                            scales: {
+                                xAxes: [{display: true, scaleLabel: {display: true, labelString: 'Distance [m]'}}],
+                                yAxes: [{display: true, scaleLabel: {display: true, labelString: 'Capacity [kbits/s]'}}],
+                            }
+                        },
+                    });
+
+                    var chart_sinr = new Chart(document.getElementById('chart-sinr'), {
+                        type: "line",
+                        data: {
+                            labels: response.data.distance,
+                            datasets: [{
+                                borderColor: "#3e95cd",
+                                data: response.data.sinr,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            title: {display: true, text: "SINR"},
+                            scales: {
+                                xAxes: [{display: true, scaleLabel: {display: true, labelString: 'Distance [m]'}}],
+                                yAxes: [{display: true, scaleLabel: {display: true, labelString: 'SINR [dB]'}}],
+                            }
+                        },
+                    });
+
+                });
+
+                // End Axios
+
+
             },
         },
         mounted() {
