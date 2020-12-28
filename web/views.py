@@ -36,6 +36,5 @@ def results(request):
     data = generator.generate_data(coordinates, radius)
     sim = simulator.Simulator(data, params)
     results_dict = sim.run(frequency=frequency, bandwidth=bandwidth)
-    print(results_dict)
 
     return JsonResponse(results_dict, safe=False)
