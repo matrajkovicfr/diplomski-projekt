@@ -1,10 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Pocetna stranica</title>
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    var app = new Vue({
+        el: "#home",
+        delimiters: ["[[", "]]"],
+        data: {
+            frequency: 2.0,
+            bandwidth: 20.0,
+            coordinates: [45.801509, 15.971139],
+            radius: 4000,
+            antenna_type: "macro",
+            avg_building_height: 5.0,
+            avg_street_width: 20.0,
+            tx_height: 40.0,
+            rx_height: 1.5,
+            area_type: "urban",
+            city_type: "large",
+            tx_power: 46.0,
+            tx_gain: 18.0,
+            tx_losses: 2.0,
+            rx_gain: 4.0,
+            rx_losses: 1.0,
+
+            results: [],
+        },
+        methods: {
+            get_results: function() {
+                axios.defaults.xsrfCookieName = 'csrftoken';
+                axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+
+                axios.post("api/results/", {
+                    frequency: this.frequency,
+                    bandwidth: this.bandwidth,
+                    coordinates: this.coordinates,
+                    radius: this.radius,
+                    antenna_type: this.antenna_type,
+                    avg_building_height: this.avg_building_height,
+                    avg_street_width: this.avg_street_width,
+                    tx_height: this.tx_height,
+                    rx_height: this.rx_height,
+                    area_type: this.area_type,
+                    city_type: this.city_type,
+                    tx_power: this.tx_power,
+                    tx_gain: this.tx_gain,
+                    tx_losses: this.tx_losses,
+                    rx_gain: this.rx_gain,
+                    rx_losses: this.rx_losses
+                }).then( response => this.results = response.data);
+            },
+        },
+        mounted() {
+            this.get_results();
+        },
+    })
+    </script>
+{% endblock %}
