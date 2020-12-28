@@ -140,30 +140,32 @@
 
         <!-- Run button -->
         <div class="flex justify-center p-4">
-            <button type="button" class="w-80 px-4 py-2 rounded bg-gray-900 text-white focus:outline-none">Update results</button>
+            <button v-on:click="get_results()" type="button" class="w-80 px-4 py-2 rounded bg-gray-900 text-white focus:outline-none">Update results</button>
         </div>
 
         <!-- Result graphs -->
         <div class="grid grid-cols-2">
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 <canvas id="chart-loss"></canvas>
             </div>
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 <canvas id="chart-received-power"></canvas>
             </div>
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 <canvas id="chart-interference-power"></canvas>
             </div>
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 <canvas id="chart-snr"></canvas>
             </div>
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 <canvas id="chart-capacity"></canvas>
             </div>
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 <canvas id="chart-sinr"></canvas>
             </div>
         </div>
+
+        <div id="mapid" style="height: 380px"></div>
 
 
     </div>
@@ -193,6 +195,8 @@
             rx_losses: 1.0,
 
             results: [],
+            geojson_layer: null,
+            map: null,
         },
         methods: {
             get_results: function() {
@@ -339,16 +343,41 @@
                         },
                     });
 
+                    // If geoJSON layers exists, remove it on update
+                    if (this.geojson_layer != null) {this.map.removeLayer(this.geojson_layer)};
+
+                    // Parse new geoJSON data and display it on map
+                    var complete_data = JSON.parse(response.data.complete_data);
+                    var complete_data_layer = L.geoJson(complete_data);
+                    this.geojson_layer = complete_data_layer;
+
+                    complete_data_layer.addTo(this.map);
+
                 });
 
                 // End Axios
 
-
             },
         },
         mounted() {
+
+            // Initialize map
+            this.map = L.map('mapid').setView(this.coordinates, 12);
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1IjoibWF0cmFqa292aWNociIsImEiOiJja2o4em5zdmwxMjRzMnlwNXQ5MGxyZXM5In0.jiGBgz-zVZHhlbQIhT7kQw'
+                }).addTo(this.map);
+
+            // Fetch initialized data
             this.get_results();
         },
     })
     </script>
+
+
+
 {% endblock %}

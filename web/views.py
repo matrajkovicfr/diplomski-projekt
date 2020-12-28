@@ -37,4 +37,10 @@ def results(request):
     sim = simulator.Simulator(data, params)
     results_dict = sim.run(frequency=frequency, bandwidth=bandwidth)
 
+    complete_data = data["sites"].append(data["centroids"]).append(data["receivers"])
+    complete_data.crs = "EPSG:3765"
+    complete_data = complete_data.to_crs("EPSG:4326")
+    complete_data = complete_data.to_json()
+    results_dict["complete_data"] = complete_data
+
     return JsonResponse(results_dict, safe=False)
