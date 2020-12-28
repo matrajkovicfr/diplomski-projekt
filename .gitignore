@@ -1,0 +1,20 @@
+# Python
+*.pyc
+*~
+__pycache__
+
+# Env
+.env
+env/
+
+# Database
+db.sqlite3
+
+# macOS
+._*
+.DS_Store
+.fseventsd
+.Spotlight-V100
+
+# PyCharm
+.idea/
