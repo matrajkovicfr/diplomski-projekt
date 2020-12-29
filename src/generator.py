@@ -77,6 +77,6 @@ def generate_data(coordinates, radius, grid=False, num_receivers=20):
     complete_data = sites.append(centroids).append(receivers)
     complete_data.crs = "EPSG:3765"
     complete_data = complete_data.to_crs("EPSG:4326")
-    complete_data.to_file("../data.geojson", driver="GeoJSON")
+    complete_data.to_file("data.geojson", driver="GeoJSON")
 
     return results
