@@ -200,6 +200,7 @@
         },
         methods: {
             get_results: function() {
+                axios.defaults.withCredentials = true;
                 axios.defaults.xsrfCookieName = 'csrftoken';
                 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
