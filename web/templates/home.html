@@ -203,6 +203,7 @@
                 axios.defaults.withCredentials = true;
                 axios.defaults.xsrfCookieName = 'csrftoken';
                 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+                axios.defaults.headers.common['Authorization'] = {{ csrf_token }};
 
                 axios.post("api/results/", {
                     frequency: this.frequency,
