@@ -6,7 +6,7 @@ SECRET_KEY = 'rgp#=z3_+uvjhee)+r$jjo8)bnp=*$klxzr1@0n7b@i=jhoqi%'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
