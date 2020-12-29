@@ -16,7 +16,6 @@ class Simulator(object):
 
     def run(self, frequency, bandwidth):
 
-        #results = []
         results = {
             "frequency": [],
             "bandwidth": [],
@@ -55,22 +54,6 @@ class Simulator(object):
             results["capacity"].append(capacity)
             results["interference_power"].append(interference_power)
             results["sinr"].append(sinr)
-
-            """
-            result = {
-                "frequency": frequency,
-                "distance": distance,
-                "loss": loss,
-                "eirp": eirp,
-                "received_power": received_power,
-                "noise": noise,
-                "snr": snr,
-                "capacity": capacity,
-                "interference_power": interference_power,
-                "sinr": sinr
-            }
-            results.append(result)
-            """
 
         return results
 

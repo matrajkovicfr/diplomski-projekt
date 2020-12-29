@@ -152,6 +152,9 @@
                 <canvas id="chart-received-power"></canvas>
             </div>
             <div class="col-span-2 md:col-span-1">
+                <canvas id="chart-noise"></canvas>
+            </div>
+            <div class="col-span-2 md:col-span-1">
                 <canvas id="chart-interference-power"></canvas>
             </div>
             <div class="col-span-2 md:col-span-1">
@@ -261,6 +264,26 @@
                             scales: {
                                 xAxes: [{display: true, scaleLabel: {display: true, labelString: 'Distance [m]'}}],
                                 yAxes: [{display: true, scaleLabel: {display: true, labelString: 'Received power [dBm]'}}],
+                            }
+                        },
+                    });
+
+                    var chart_noise = new Chart(document.getElementById('chart-noise'), {
+                        type: "line",
+                        data: {
+                            labels: response.data.distance,
+                            datasets: [{
+                                borderColor: "#3e95cd",
+                                data: response.data.noise,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            title: {display: true, text: "Johnson-Nyquist noise"},
+                            scales: {
+                                xAxes: [{display: true, scaleLabel: {display: true, labelString: 'Distance [m]'}}],
+                                yAxes: [{display: true, scaleLabel: {display: true, labelString: 'Noise [dBm]'}}],
                             }
                         },
                     });
